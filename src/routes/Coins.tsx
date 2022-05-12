@@ -73,7 +73,7 @@ function Coins() {
             setCoins(json.slice(0, 100));
             setLoading(false);
         })();
-    }, [coins]);
+    }, []);
 
     return <Container>
         <Header>
@@ -86,10 +86,8 @@ function Coins() {
                 {coins.map(coin => (
                     <Coin key={coin.id}>
                         <Link
-                            to={{
-                                pathname: `/${coin.id}`,
-                                state: { name: coin.name },
-                            }}
+                            to={`/${coin.id}`}
+                            state= { {name: coin.name }}
                         >
                             <Img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
                             {coin.name} &rarr;
