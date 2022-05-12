@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { Link, matchPath } from "react-router-dom";
 // import { useRouteMatch } from "react-router-dom";
 import { Outlet, Route, Routes, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoin, fetchTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 
@@ -136,27 +138,31 @@ interface PriceData {
 
 function Coin() {
     const { coinId } = useParams<keyof RouteParams>();
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const location = useLocation();
     const state = location.state as RouteState;
-    const [info, setInfo] = useState<InfoData>();
-    const [priceInfo, setPriceInfo] = useState<PriceData>();
+    // const [info, setInfo] = useState<InfoData>();
+    // const [priceInfo, setPriceInfo] = useState<PriceData>();
+    const { isLoading: infoLoading, data: info } = useQuery<InfoData>(["info", coinId], () => fetchCoin(coinId!))
+    const { isLoading: priceLoading, data: priceInfo } = useQuery<PriceData>(["price", coinId], () => fetchTickers(coinId!))
     const priceMatch = matchPath("/:coinId/price", location.pathname);
     const chartMatch = matchPath("/:coinId/chart", location.pathname);
 
-    useEffect(() => {
-        (async () => {
-            const infoData = await (
-                await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-            ).json();
-            const priceData = await (
-                await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-            ).json();
-            setInfo(infoData);
-            setPriceInfo(priceData);
-            setLoading(false);
-        })();
-    }, [coinId]);
+    // useEffect(() => {
+    //     (async () => {
+    //         const infoData = await (
+    //             await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
+    //         ).json();
+    //         const priceData = await (
+    //             await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
+    //         ).json();
+    //         setInfo(infoData);
+    //         setPriceInfo(priceData);
+    //         setLoading(false);
+    //     })();
+    // }, [coinId]);
+
+    const loading = infoLoading || priceLoading
 
     return <Container>
         <Header>
