@@ -1,4 +1,5 @@
 // import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -7,16 +8,19 @@ import { fetchCoins } from "../api";
 
 const Container = styled.div`
     padding: 0px 20px;
+    max-width: 480px;
+    margin: 0 auto;
 `;
 
 const Header = styled.header`
-    height: 10vh;
+    height: 15vh;
     display: flex;
     justify-content: center;
     align-items: center;
 `;
 
 const CoinList = styled.ul``;
+
 const Coin = styled.li`
     background-color: white;
     color: ${props => props.theme.bgColor};
@@ -65,7 +69,7 @@ interface CoinInterface {
 // https://coinicons-api.vercel.app/api/icon/btc
 
 function Coins() {
-    const {isLoading, data} = useQuery<CoinInterface[]>("allConis", fetchCoins)
+    const { isLoading, data } = useQuery<CoinInterface[]>("allConis", fetchCoins)
     // const [coins, setCoins] = useState<CoinInterface[]>([]);
     // const [loading, setLoading] = useState(true);
 
@@ -79,6 +83,9 @@ function Coins() {
     // }, []);
 
     return <Container>
+        <Helmet>
+            <title>코인</title>
+        </Helmet>
         <Header>
             <Title>코인</Title>
         </Header>
@@ -90,7 +97,7 @@ function Coins() {
                     <Coin key={coin.id}>
                         <Link
                             to={`/${coin.id}`}
-                            state= { {name: coin.name }}
+                            state={{ name: coin.name }}
                         >
                             <Img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
                             {coin.name} &rarr;

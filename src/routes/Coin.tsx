@@ -7,9 +7,12 @@ import styled from "styled-components";
 import { fetchCoin, fetchTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
     padding: 0px 20px;
+    max-width: 480px;
+    margin: 0 auto;
 `;
 
 const Header = styled.header`
@@ -144,7 +147,13 @@ function Coin() {
     // const [info, setInfo] = useState<InfoData>();
     // const [priceInfo, setPriceInfo] = useState<PriceData>();
     const { isLoading: infoLoading, data: info } = useQuery<InfoData>(["info", coinId], () => fetchCoin(coinId!))
-    const { isLoading: priceLoading, data: priceInfo } = useQuery<PriceData>(["price", coinId], () => fetchTickers(coinId!))
+    const { isLoading: priceLoading, data: priceInfo } = useQuery<PriceData>(
+        ["price", coinId],
+        () => fetchTickers(coinId!),
+        {
+            refetchInterval: 5000,
+        }
+    )
     const priceMatch = matchPath("/:coinId/price", location.pathname);
     const chartMatch = matchPath("/:coinId/chart", location.pathname);
 
@@ -165,6 +174,11 @@ function Coin() {
     const loading = infoLoading || priceLoading
 
     return <Container>
+        <Helmet>
+            <title>
+                {state?.name ? state.name : loading ? "Loading.." : info?.name}
+            </title>
+        </Helmet>
         <Header>
             <Title>{state?.name ? state.name : loading ? "Loading.." : info?.name}</Title>
         </Header>
@@ -182,8 +196,8 @@ function Coin() {
                         <span>{info?.symbol}</span>
                     </OverviewItem>
                     <OverviewItem>
-                        <span>Open Source:</span>
-                        <span>{info?.open_source ? "Yes" : "No"}</span>
+                        <span>Price:</span>
+                        <span>${priceInfo?.quotes.USD.price.toFixed(3)}</span>
                     </OverviewItem>
                 </Overview>
                 <Description>{info?.description}</Description>
@@ -206,7 +220,7 @@ function Coin() {
                     </Tab>
                 </Tabs>
 
-                <Outlet />
+                <Outlet context={{ coinId }} />
                 {/* <Routes>
                     <Route path={`/${coinId}/price`} element={<Price />} />
                     <Route path={`/${coinId}/chart`} element={<Chart />} />
