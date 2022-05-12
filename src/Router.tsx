@@ -12,7 +12,7 @@ function Router() {
                 <Route path="price" element={<Price />} />
                 <Route path="chart" element={<Chart />} />˝
             </Route>
-            <Route path="/" element={<Coins />} />
+            <Route path={`${process.env.PUBLIC_URL}/`} element={<Coins />} />
         </Routes>
     </BrowserRouter>)
 }
