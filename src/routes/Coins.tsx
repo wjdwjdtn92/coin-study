@@ -8,7 +8,7 @@ import { fetchCoins } from "../api";
 
 const Container = styled.div`
     padding: 0px 20px;
-    max-width: 480px;
+    max-width: 600px;
     margin: 0 auto;
 `;
 

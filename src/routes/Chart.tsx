@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
+import dayjs from "dayjs";
 
 interface ChartProps {
     coinId: string;
@@ -25,9 +26,13 @@ function Chart() {
         ["ohlcv", coinId],
         () => fetchCoinHistory(coinId),
         {
-            refetchInterval: 1000,
+            refetchInterval: 100000,
         }
     )
+
+    // coinHistoryData!.map(price => 
+    //     console.log(price.time_close)
+    // )
 
     console.log(coinId);
     return <h1>{
@@ -35,11 +40,17 @@ function Chart() {
             "Loading chart...."
         ) : (
             <ApexChart
-                type="line"
+                type="candlestick"
                 series={[
                     {
                         name: "Price",
-                        data: coinHistoryData!.map(price => price.close),
+                        data: coinHistoryData!.map(price => (
+                            {
+                                x: new Date(price.time_close),
+                                y: [price.open.toFixed(2), price.high.toFixed(2), price.low.toFixed(2), price.close.toFixed(2)],
+                            }
+                        ))
+                        // y: [1,2,3,4],
                     }
                 ]}
                 options={{
@@ -47,40 +58,43 @@ function Chart() {
                         mode: "dark"
                     },
                     chart: {
-                        height: 500,
-                        width: 500,
+                        height: 350,
                         toolbar: {
                             show: false,
                         },
                         background: "transparent",
                     },
+                    title: {
+                        text: `${coinId.toUpperCase()}`,
+                        align: 'center'
+                    },
+                    plotOptions: {
+                        candlestick: {
+                            wick: {
+                                useFillColor: true,
+                            }
+                        }
+                    },
                     stroke: {
-                        curve: "smooth",
                         width: 3,
                     },
-                    grid: {
-                        show: false,
-                    },
                     yaxis: {
-                        show: false
-                    },
-                    xaxis: {
-                        axisBorder: { show: false },
-                        axisTicks: { show: false },
-                        labels: { show: false },
-                        type: "datetime",
-                        categories: coinHistoryData!.map(price => price.time_close),
-                    },
-                    fill: {
-                        type: "gradient",
-                        gradient: { gradientToColors: ["blue"], stops: [0, 100] }
-                    },
-                    colors: ["red"],
-                    tooltip: {
-                        y: {
+                        tooltip: {
+                            enabled: false
+                        },
+                        labels: {
                             formatter: (value) => `$${value.toFixed(2)}`
                         },
-                    }
+                    },
+
+                    xaxis: {
+                        type: 'category',
+                        labels: {
+                            formatter: function (val) {
+                                return dayjs(val).format('MMM DD');
+                            }
+                        },
+                    },
                 }}
             >
 
