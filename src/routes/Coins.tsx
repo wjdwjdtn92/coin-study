@@ -22,8 +22,8 @@ const Header = styled.header`
 const CoinList = styled.ul``;
 
 const Coin = styled.li`
-    background-color: white;
-    color: ${props => props.theme.bgColor};
+    background-color: ${props => props.theme.contentBgColor};
+    color: ${props => props.theme.textColor};
     padding: 20px;
     border-radius: 15px;
     margin-bottom: 10px;
@@ -54,6 +54,29 @@ const Img = styled.img`
     width:25px;
     height:25px;
     margin-right: 10px;
+`
+
+const Button = styled.button`
+    text-align: center;
+    border-radius: 15px;
+    width: 120px;
+    height: 50%;
+    padding: 10px 25px;
+    border: 2px solid ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.contentBgColor};
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    color: ${(props) => props.theme.textColor};
+    /* float: left; */
+
+    transition: all 0.3s ease;
+    
+    &:hover {
+        border: 2px solid ${(props) => props.theme.accentColor};;
+    }
 `
 
 

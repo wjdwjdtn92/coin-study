@@ -14,7 +14,7 @@ export function fetchCoin(coinId: string) {
 }
 
 export function fetchTickers(coinId: string) {
-    return fetch(`${BASE_URL}/tickers/${coinId}`).then(
+    return fetch(`${BASE_URL}/tickers/${coinId}?quotes=USD,KRW`).then(
         response => response.json()
     );
 }

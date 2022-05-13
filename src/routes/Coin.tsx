@@ -8,6 +8,8 @@ import { fetchCoin, fetchTickers } from "../api";
 import Chart from "./Chart";
 import Price from "./Price";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
+
 
 const Container = styled.div`
     padding: 0px 20px;
@@ -17,7 +19,9 @@ const Container = styled.div`
 
 const Header = styled.header`
     height: 10vh;
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr 1fr 1fr;
     justify-content: center;
     align-items: center;
 `;
@@ -35,7 +39,7 @@ const Loader = styled.span`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${props => props.theme.contentBgColor};
   padding: 10px 20px;
   border-radius: 10px;
 `;
@@ -66,7 +70,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${props => props.theme.contentBgColor};
   padding: 7px 0px;
   border-radius: 10px;
   color: ${(props) =>
@@ -75,6 +79,29 @@ const Tab = styled.span<{ isActive: boolean }>`
     display: block;
   }
 `;
+
+const Button = styled.button`
+    text-align: center;
+    border-radius: 15px;
+    width: 120px;
+    height: 50%;
+    padding: 10px 25px;
+    border: 2px solid ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.contentBgColor};
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    display: inline-block;
+    color: ${(props) => props.theme.textColor};
+    /* float: left; */
+
+    transition: all 0.3s ease;
+    
+    &:hover {
+        border: 2px solid ${(props) => props.theme.accentColor};;
+    }
+`
 
 interface RouteParams {
     coinId: string;
@@ -136,6 +163,25 @@ interface PriceData {
             volume_24h: number;
             volume_24h_change_24h: number;
         };
+        KRW: {
+            ath_date: string;
+            ath_price: number;
+            market_cap: number;
+            market_cap_change_24h: number;
+            percent_change_1h: number;
+            percent_change_1y: number;
+            percent_change_6h: number;
+            percent_change_7d: number;
+            percent_change_12h: number;
+            percent_change_15m: number;
+            percent_change_24h: number;
+            percent_change_30d: number;
+            percent_change_30m: number;
+            percent_from_price_ath: number;
+            price: number;
+            volume_24h: number;
+            volume_24h_change_24h: number;
+        };
     };
 }
 
@@ -144,6 +190,7 @@ function Coin() {
     // const [loading, setLoading] = useState(true);
     const location = useLocation();
     const state = location.state as RouteState;
+    const navigate = useNavigate();
     // const [info, setInfo] = useState<InfoData>();
     // const [priceInfo, setPriceInfo] = useState<PriceData>();
     const { isLoading: infoLoading, data: info } = useQuery<InfoData>(["info", coinId], () => fetchCoin(coinId!))
@@ -151,7 +198,7 @@ function Coin() {
         ["price", coinId],
         () => fetchTickers(coinId!),
         {
-            refetchInterval: 5000,
+            refetchInterval: 10000,
         }
     )
     const priceMatch = matchPath("/:coinId/price", location.pathname);
@@ -180,6 +227,7 @@ function Coin() {
             </title>
         </Helmet>
         <Header>
+            <Button onClick={() => navigate(-1)}> Go back</Button>
             <Title>{state?.name ? state.name : loading ? "Loading.." : info?.name}</Title>
         </Header>
         {loading ? (
@@ -220,7 +268,7 @@ function Coin() {
                     </Tab>
                 </Tabs>
 
-                <Outlet context={{ coinId }} />
+                <Outlet context={chartMatch ? { coinId } : priceMatch ? priceInfo : null} />
                 {/* <Routes>
                     <Route path={`/${coinId}/price`} element={<Price />} />
                     <Route path={`/${coinId}/chart`} element={<Chart />} />

@@ -26,7 +26,7 @@ function Chart() {
         ["ohlcv", coinId],
         () => fetchCoinHistory(coinId),
         {
-            refetchInterval: 100000,
+            refetchInterval: 10000,
         }
     )
 
@@ -34,7 +34,6 @@ function Chart() {
     //     console.log(price.time_close)
     // )
 
-    console.log(coinId);
     return <h1>{
         isLoading ? (
             "Loading chart...."
