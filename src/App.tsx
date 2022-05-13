@@ -95,7 +95,7 @@ const DarkModeButton = styled.button`
 
 
 function App() {
-    const [darkMode, setDarkMode] = useState(false);
+    const [darkMode, setDarkMode] = useState(true);
     const theme = darkMode ? darkTheme : lightTheme;
     const onClick = () => {
         setDarkMode(!darkMode);
