@@ -42,7 +42,7 @@ const Coin = styled.li`
 
 const Title = styled.h1`
     font-size: 48px;
-    color: ${props => props.theme.accentColor};
+    color: ${props => props.theme.titleColor};
 `;
 
 const Loader = styled.span`

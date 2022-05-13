@@ -4,6 +4,7 @@ import { useOutletContext } from "react-router-dom";
 import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
 import dayjs from "dayjs";
+import styled from "styled-components";
 
 interface ChartProps {
     coinId: string;
@@ -20,6 +21,11 @@ interface CoinHistoryInterface {
     market_cap: number;
 }
 
+const Container = styled.div`
+    color: ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.contentBgColor};
+`
+
 function Chart() {
     const { coinId } = useOutletContext<ChartProps>();
     const { isLoading, data: coinHistoryData } = useQuery<CoinHistoryInterface[]>(
@@ -34,7 +40,7 @@ function Chart() {
     //     console.log(price.time_close)
     // )
 
-    return <h1>{
+    return <Container>{
         isLoading ? (
             "Loading chart...."
         ) : (
@@ -65,7 +71,7 @@ function Chart() {
                     },
                     title: {
                         text: `${coinId.toUpperCase()}`,
-                        align: 'center'
+                        align: 'center',
                     },
                     plotOptions: {
                         candlestick: {
@@ -99,7 +105,7 @@ function Chart() {
 
             </ApexChart>
         )}
-    </h1>
+    </Container>
 }
 
 export default Chart;

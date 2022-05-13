@@ -1,6 +1,8 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 import Router from "./Router";
 import { ReactQueryDevtools } from 'react-query/devtools'
+import { darkTheme, lightTheme } from "./theme";
+import { useState } from "react";
 
 
 const GlobalStyle = createGlobalStyle`
@@ -68,14 +70,44 @@ a {
 }
 `;
 
+const DarkModeButton = styled.button`
+    position: fixed;
+    right: 78px;
+    bottom: 19px;
+    display: inline-block;
+    width: 136px;
+    height: 53px;
+    background-position: -270px -55px;
+    background-repeat: no-repeat;
+    vertical-align: top;
+    cursor: pointer;
+    z-index: 100;
+    border-radius: 25px;
+    border: 2px solid ${(props) => props.theme.titleColor};
+    background-color: ${(props) => props.theme.bgColor};
+    color: ${(props) => props.theme.textColor};
+
+    &:hover {
+        background-color: ${(props) => props.theme.textColor};
+        color: ${(props) => props.theme.bgColor};
+    }
+`
+
 
 function App() {
+    const [darkMode, setDarkMode] = useState(false);
+    const theme = darkMode ? darkTheme : lightTheme;
+    const onClick = () => {
+        setDarkMode(!darkMode);
+    }
+
     return (
-        <>
+        <ThemeProvider theme={theme}>
             <GlobalStyle />
             <Router />
             <ReactQueryDevtools />
-        </>
+            <DarkModeButton onClick={onClick}>{darkMode ? "Light Mode" : "Dark Mode" }</DarkModeButton>
+        </ThemeProvider>
     );
 }
 

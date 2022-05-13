@@ -57,17 +57,22 @@ interface PriceData {
 
 const Caption = styled.caption`
     text-align:right;
-    color: ${(props) => props.theme.accentColor};
+    padding-right: 3px;
+    margin: 10px;
+    color: ${(props) => props.theme.textColor};
 `
 
 
 const StyledTable = styled.table`
     // custom css goes here
-    background-color: rgba(0, 0, 0, 0.5);
     width: 100%; /* responsive */
     border-collapse: collapse;
     margin: auto; 
     text-align: center;
+
+
+    color: ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.contentBgColor};
 
     caption-side: bottom;
 

@@ -28,7 +28,7 @@ const Header = styled.header`
 
 const Title = styled.h1`
     font-size: 48px;
-    color: ${props => props.theme.accentColor};
+    color: ${props => props.theme.titleColor};
 `;
 
 const Loader = styled.span`
@@ -82,12 +82,12 @@ const Tab = styled.span<{ isActive: boolean }>`
 
 const Button = styled.button`
     text-align: center;
-    border-radius: 15px;
+    border-radius: 25px;
     width: 120px;
     height: 50%;
     padding: 10px 25px;
     border: 2px solid ${(props) => props.theme.textColor};
-    background-color: ${(props) => props.theme.contentBgColor};
+    background-color: ${(props) => props.theme.bgColor};
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -99,7 +99,9 @@ const Button = styled.button`
     transition: all 0.3s ease;
     
     &:hover {
-        border: 2px solid ${(props) => props.theme.accentColor};;
+        border: 2px solid ${(props) => props.theme.bgColor};
+        background-color: ${(props) => props.theme.textColor};
+        color: ${(props) => props.theme.bgColor};
     }
 `
 
@@ -222,9 +224,9 @@ function Coin() {
 
     return <Container>
         <Helmet>
-            <title>
+            <Title>
                 {state?.name ? state.name : loading ? "Loading.." : info?.name}
-            </title>
+            </Title>
         </Helmet>
         <Header>
             <Button onClick={() => navigate(-1)}> Go back</Button>
