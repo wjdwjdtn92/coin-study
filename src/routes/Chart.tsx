@@ -5,8 +5,10 @@ import { fetchCoinHistory } from "../api";
 import ApexChart from "react-apexcharts";
 import dayjs from "dayjs";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "../atoms";
 
-interface ChartProps {
+interface ChartInterface {
     coinId: string;
 }
 
@@ -26,8 +28,10 @@ const Container = styled.div`
     background-color: ${(props) => props.theme.contentBgColor};
 `
 
+
 function Chart() {
-    const { coinId } = useOutletContext<ChartProps>();
+    const { coinId } = useOutletContext<ChartInterface>();
+    const isDark = useRecoilValue(isDarkAtom);
     const { isLoading, data: coinHistoryData } = useQuery<CoinHistoryInterface[]>(
         ["ohlcv", coinId],
         () => fetchCoinHistory(coinId),
@@ -60,7 +64,7 @@ function Chart() {
                 ]}
                 options={{
                     theme: {
-                        mode: "dark"
+                        mode: isDark ? "dark" : "light",
                     },
                     chart: {
                         height: 350,

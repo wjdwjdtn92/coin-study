@@ -1,4 +1,4 @@
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
@@ -89,7 +89,6 @@ interface CoinInterface {
     is_activate: boolean,
     type: string,
 }
-// https://coinicons-api.vercel.app/api/icon/btc
 
 function Coins() {
     const { isLoading, data } = useQuery<CoinInterface[]>("allConis", fetchCoins)
